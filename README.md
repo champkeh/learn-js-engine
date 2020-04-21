@@ -55,6 +55,7 @@ Source Position Table (size = 0)
 ```
 可以看到我们的`foo`函数对应的字节码。
 
-## 引擎分析文章
+## 优质文章
 
-1. [JavaScript引擎基础：Shapes 和 Inline Caches](https://github.com/champkeh/learn-js-engine/issues/1)
+1. [JavaScript engine fundamentals: Shapes and Inline Caches](https://mathiasbynens.be/notes/shapes-ics)
+2. [JavaScript engine fundamentals: optimizing prototypes](https://mathiasbynens.be/notes/prototypes)
