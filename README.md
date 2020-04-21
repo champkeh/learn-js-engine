@@ -13,19 +13,25 @@ https://storage.googleapis.com/chromium-v8/official/canary/v8-mac64-dbg-latest.j
 {"version": "8.4.144"}
 ```
 
+
 ### 2. 下载对应平台的`d8`
 ```
 mac平台:
 https://storage.googleapis.com/chromium-v8/official/canary/v8-mac64-dbg-${version}.zip
+
 linux32平台:
 https://storage.googleapis.com/chromium-v8/official/canary/v8-linux32-dbg-${version}.zip
+
 linux64平台:
 https://storage.googleapis.com/chromium-v8/official/canary/v8-linux64-dbg-${version}.zip
+
 win32平台:
 https://storage.googleapis.com/chromium-v8/official/canary/v8-win32-dbg-${version}.zip
+
 win64平台:
 https://storage.googleapis.com/chromium-v8/official/canary/v8-win64-dbg-${version}.zip
 ```
+
 比如，我要下载`mac`平台的`d8`，直接浏览器访问`https://storage.googleapis.com/chromium-v8/official/canary/v8-mac64-dbg-8.4.144.zip`，
 就可以下载到`v8.4.144`这个版本的`d8`了。
 > storage.googleapis.com 这个域名在国内是可以直接访问的。
@@ -48,3 +54,7 @@ Handler Table (size = 0)
 Source Position Table (size = 0)
 ```
 可以看到我们的`foo`函数对应的字节码。
+
+## 引擎分析文章
+
+1. [JavaScript引擎基础：Shapes 和 Inline Caches](https://github.com/champkeh/learn-js-engine/issues/1)
