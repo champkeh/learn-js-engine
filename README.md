@@ -165,7 +165,7 @@ point.z = 6;
 其对应的`shape chain`如下:
 ![shape-table-1](assets/shapetable-1.png)
 
-假设我们现在要访问`x`属性，比如程序中写了`console.log(point.x)`，`JavaScript`引擎需要从`shape chain`的最底部开始，顺着链表往上查找。
+假设我们现在要访问`x`属性，比如程序中写了`x = point.x;`，`JavaScript`引擎需要从`shape chain`的最底部开始，顺着链表往上查找。
 直到找到引入`x`属性的`shape`，然后获取其`offset`
 
 如果我们频繁的这样查找，效率其实是很低的，尤其当我们的`JSObject`对象中的属性变多之后，这个查找速度是`O(n)`，`n`是我们`JSObject`对象中的属性个数。
@@ -217,7 +217,7 @@ function getX(o) {
 该函数后续的调用，`IC`只需要比较参数的`shape`是否发生了变化，如果没有变化，直接就可以根据缓存的偏移值去`JSObject`中加载值了。
 如下图所示:
 ![ic-4](assets/ic-4.png)
-这样就可以避免掉昂贵的`property information`的搜索过程了。
+这样就可以避免掉昂贵的`property information`的搜索过程了。(图中的灰色)
 
 
 ### 高效存储数组
