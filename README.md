@@ -166,7 +166,7 @@ point.z = 6;
 ![shape-table-1](assets/shapetable-1.png)
 
 假设我们现在要访问`x`属性，比如程序中写了`console.log(point.x)`，`JavaScript`引擎需要从`shape chain`的最底部开始，顺着链表往上查找。
-知道找到引入`x`属性的`shape`，然后获取其`offset`
+直到找到引入`x`属性的`shape`，然后获取其`offset`
 
 如果我们频繁的这样查找，效率其实是很低的，尤其当我们的`JSObject`对象中的属性变多之后，这个查找速度是`O(n)`，`n`是我们`JSObject`对象中的属性个数。
 
@@ -188,4 +188,38 @@ point.z = 6;
 
 
 #### Inline Caches (ICs)
+
+假设我们有这样一段代码:
+```js
+// 用来加载对象o的属性x
+function getX(o) {
+  return o.x;
+}
+```
+
+如果用`JSC`运行这个函数的话，生成的字节码如下:
+![ic-1](assets/ic-1.png)
+第一条指令`get_by_id`从第一个参数(`arg1`)中加载属性`x`，并存储在`loc0`中。
+第二条指令返回这个`loc0`。
+
+如上图所示，`JSC`嵌入了一个`IC`到`get_by_id`这条指令中，这个`IC`由2个未初始化的插槽(`slot`)组成。
+
+现在，假设我们调用这个函数的参数对象是`{ x: 'a' }`，如下图所示:
+![ic-2](assets/ic-2.png)
+
+我们前面已经分析过了，这个对象有一个带`x`属性的`shape`对象，`shape`对象内部存储了`x`的偏移。
+当你第一次执行这个函数的时候，`get_by_id`指令会去查找属性`x`(沿着`shape linked list`或者`ShapeTable`查找)，最终找到这个属性的偏移是0。
+
+这时候，内嵌到`get_by_id`指令里面的这个`IC`就会缓存这个结果，第一个插槽指向参数对应的`shape`对象，第二个插槽保存对应属性的偏移值。
+如下图所示:
+![ic-3](assets/ic-3.png)
+
+该函数后续的调用，`IC`只需要比较参数的`shape`是否发生了变化，如果没有变化，直接就可以根据缓存的偏移值去`JSObject`中加载值了。
+如下图所示:
+![ic-4](assets/ic-4.png)
+这样就可以避免掉昂贵的`property information`的搜索过程了。
+
+
+### 高效存储数组
+
 
