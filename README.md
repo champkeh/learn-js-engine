@@ -1,5 +1,5 @@
 # learn-js-engine
-记录自己学习JavaScript引擎的一些总结
+记录自己学习JavaScript引擎的一些知识总结
 
 > 主要是关于v8的内容，后续可能会涉及到v8和其他引擎之间的对比
 
@@ -37,7 +37,7 @@ https://storage.googleapis.com/chromium-v8/official/canary/v8-win64-dbg-${versio
 > storage.googleapis.com 这个域名在国内是可以直接访问的。
 
 ### 3. 使用d8输出一些信息
-> 我已经下载好了一个v8.4.144的工具，放在了v8-dbg下面，里面有一个可行性文件d8。
+> 我已经下载好了一个v8.4.144的工具，放在了v8-dbg下面，里面有一个可执行文件d8。
 
 ```shell script
 $ ./v8-dbg/d8 demo.js --print-bytecode
@@ -67,3 +67,18 @@ Source Position Table (size = 0)
 8. [How JavaScript works: inside the V8 engine + 5 tips on how to write optimized code](https://blog.sessionstack.com/how-javascript-works-inside-the-v8-engine-5-tips-on-how-to-write-optimized-code-ac089e62b12e)
 9. [V8 hidden class and inline cache](https://www.slideshare.net/prodromouf/v8-hidden-class-and-inline-cache)
 10. [V8 internals](https://v8.dev/blog/tags/internals)
+
+
+## JavaScript的对象模型(Object Modal)
+根据 `ECMAScript` 规范的定义，`JavaScript`中的对象定义为一个字典，通过字符串的属性名引用`Property Attribute`对象，如下图所示：
+![object-modal](assets/object-model.svg)
+
+> 要注意的点是，作为字典，对象内部只存储属性名，这些属性名映射到对应的`Property Arrtibutes`上，我们的属性值就存储在这些`Property Arrtibute`上面。<br/>
+> 我们可以通过 `Object.getOwnPropertyDescriptor` 这个api访问到对应的`Property Attribute`对象
+
+数组其实是一类特殊的对象，只不过数组会对索引进行特殊的处理。
+![array-modal](assets/array-1.svg)
+
+> 注意：数组的索引有一个最大限额，为`2**32 - 1`个，也就是说，数组的索引范围为`0 ~ 2**32-2`，如果超过这个范围，则多出来的索引退化为普通对象的存储模式。
+
+![array-model](assets/array-2.png)
