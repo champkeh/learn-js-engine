@@ -71,14 +71,14 @@ Source Position Table (size = 0)
 
 ## JavaScript的对象模型(Object Modal)
 根据 `ECMAScript` 规范的定义，`JavaScript`中的对象定义为一个字典，通过字符串的属性名引用`Property Attribute`对象，如下图所示：
-![object-modal](assets/object-model.svg)
+![object-modal](./assets/object-model.png)
 
 > 要注意的点是，作为字典，对象内部只存储属性名，这些属性名映射到对应的`Property Arrtibutes`上，我们的属性值就存储在这些`Property Arrtibute`上面。<br/>
 > 我们可以通过 `Object.getOwnPropertyDescriptor` 这个api访问到对应的`Property Attribute`对象
 
 数组其实是一类特殊的对象，只不过数组会对索引进行特殊的处理。
-![array-modal](assets/array-1.svg)
+![array-modal](./assets/array-1.png)
 
 > 注意：数组的索引有一个最大限额，为`2**32 - 1`个，也就是说，数组的索引范围为`0 ~ 2**32-2`，如果超过这个范围，则多出来的索引退化为普通对象的存储模式。
 
-![array-model](assets/array-2.png)
+![array-model](./assets/array-2.png)
