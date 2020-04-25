@@ -222,4 +222,60 @@ function getX(o) {
 
 ### 高效存储数组
 
+数组，我们前面已经说过了，是一种特殊的对象。特殊在哪里呢？数组的`property name`都是数字，我们称之为`array indics`，就是数组索引。
+如果我们保存数组的每一个元素的`property attribute`的话，将是一笔不小的开销。
 
+考虑下面这段代码:
+```js
+const array = [
+    '#jsconfeu',
+];
+```
+
+引擎在数组对象中存储`length`属性的值(1)，并指向它的`shape`对象，该`shape`对象和普通`JSObject`对象的`shape`并无区别。
+如下图所示:
+![array-shape](assets/array-shape.png)
+
+这和我们前面分析对象时差不多，但是，数组的元素值存储在哪呢？
+
+如下图所示:
+![array-elements](assets/array-elements.png)
+
+每一个数组都会有一个单独的`elements backing store`，这个地方用来存储数组的所有**索引属性值**。
+还记得之前我们说过，数组的最大索引值为`2**32-2`，超过这个索引的元素值，将不会再存储在这个地方了。
+
+`JavaScript`引擎不需要为这里面的每一个元素保存单独的`property attribute`数据，因为通常数组的所有元素都是可写、可枚举、可配置的。
+也就是说，通常我们只需要为整个数组保存一个`property attribute`就可以了。
+
+凡事都有例外，如果你非要修改一个数组元素的`property attribute`，那又会发生什么呢？
+```js
+// Please don't ever do this!
+const array = Object.defineProperty(
+    [],
+    '0',
+    {
+        value: 'Oh noes!!',
+        writable: false,
+        enumerable: false,
+        configurable: false,    
+    }
+);
+```
+上面这段代码给一个空数组定义了一个属性`'0'`，这个`'0'`正好也是一个数组索引值，但是却给它设置了一个非默认的`property attribute`。
+
+在这种极端情况下，`JavaScript`引擎将会把**整个**`elements backing store`作为一个字典存储，字典的`key`是数组的索引值，`value`是这个元素
+的`property attribute`对象。
+如下图所示:
+![array-dictionary-elements](assets/array-dictionary-elements.png)
+
+即便数组中只有一个元素是这种非默认的`property attribute`，整个数组的`backing store`也都会回退到这种低速且低效的字典模式。
+
+因此，一定一定要避免在**数组索引上**使用`Object.defineProperty`。
+
+
+### 总结
+我们了解了`JavaScript`引擎是如何存储对象和数组的，以及`Shapes`和`ICs`是如何用来优化对象的常见操作的。
+基于这些知识，我们可以识别出一些`JavaScript`编码的最佳实践，来帮助提升性能:
+
+1. 总是用同样的方式初始化对象，以便他们可以有相同的`shape`。
+2. 不要在数组元素上搞`property attribute`，以便他们可以高效存储和操作。 
