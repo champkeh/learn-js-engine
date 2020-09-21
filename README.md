@@ -14,6 +14,20 @@
 这是因为`gclient`工具不识别环境变量设置的代理，所以按照提示配置.boto文件即可。
 参照[这里](https://github.com/ChenYilong/WebRTC/blob/master/WebRTC%E5%9C%A8iOS%E7%AB%AF%E7%9A%84%E5%AE%9E%E7%8E%B0/WebRTC%E5%9C%A8iOS%E7%AB%AF%E7%9A%84%E5%AE%9E%E7%8E%B0.md)
 
+### 编译
+1. 进入v8源码目录
+```shell script
+cd /path/to/v8
+```
+2. 更新代码与依赖
+```shell script
+git pull && gclient sync
+```
+3. 编译
+```shell script
+tools/dev/gm.py x64.debug
+```
+[查看编译工具gm.py的更多介绍](notes/build-tools-about-v8.md)
 
 ## 优质文章
 1. [JavaScript engine fundamentals: Shapes and Inline Caches](https://mathiasbynens.be/notes/shapes-ics)
